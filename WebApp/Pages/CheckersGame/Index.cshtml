@@ -1,0 +1,86 @@
+@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Domain
+@model WebApp.Pages_CheckersGame.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Games</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Started
+            </th>
+            <th>
+                Ended
+            </th>
+            <th>
+                Winner
+            </th>
+            <th>
+                Player 1 name
+            </th>
+            <th>
+                Player 1 type
+            </th>
+            <th>
+                Player 2 name
+            </th>
+            <th>
+                Player 2 type
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckersGame[0].Options)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.CheckersGame) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GameOverAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GameWonByPlayer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Player1Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Player1Side)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Player2Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Player2Side)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Options!.OptionsName)
+            </td>
+            <td>
+                @if (item.Player1Side == EPlayerSide.WhiteSide)
+                {
+                    <a asp-page="./Play" asp-route-id="@item.CheckersGameId" asp-route-playerSide="@item.Player1Side">Continue as P1</a>
+                }
+                @if (item.Player2Side == EPlayerSide.BlackSide)
+                {
+                    <a asp-page="./Play" asp-route-id="@item.CheckersGameId" asp-route-playerSide="@item.Player2Side">Continue as P2</a>
+                }
+                <a asp-page="./Delete" asp-route-id="@item.CheckersGameId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

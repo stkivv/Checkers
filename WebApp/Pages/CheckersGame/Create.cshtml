@@ -1,0 +1,60 @@
+@page
+@using Domain
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model WebApp.Pages_CheckersGame.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>CheckersGame</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">Player 1 name</label>
+                <input asp-for="CheckersGame.Player1Name" class="form-control" />
+                <span asp-validation-for="CheckersGame.Player1Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Player 1 type</label>
+                <select asp-for="CheckersGame.Player1Side" asp-items="Model.Player1SideSelectList" class="form-select"></select>
+                <span asp-validation-for="CheckersGame.Player1Side" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Player 2 name</label>
+                <input asp-for="CheckersGame.Player2Name" class="form-control" />
+                <span asp-validation-for="CheckersGame.Player2Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Player 2 type</label>
+                <select asp-for="CheckersGame.Player2Side" asp-items="Model.Player2SidSelectList" class="form-select"></select>
+                <span asp-validation-for="CheckersGame.Player2Side" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Options</label>
+                <select asp-for="CheckersGame.CheckersOptionsId" class ="form-select" asp-items="Model.OptionsSelectList"></select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Game name</label>
+                <input asp-for="CheckersGame.GameName" class="form-control" />
+                <span asp-validation-for="CheckersGame.GameName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

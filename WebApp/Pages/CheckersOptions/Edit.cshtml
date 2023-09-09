@@ -1,0 +1,71 @@
+@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model WebApp.Pages_CheckersOptions.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>CheckersOptions</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CheckersOptions.CheckersOptionsId" />
+            <div class="form-group">
+                <label asp-for="CheckersOptions.OptionsName" class="control-label"></label>
+                <input asp-for="CheckersOptions.OptionsName" class="form-control" />
+                <span asp-validation-for="CheckersOptions.OptionsName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CheckersOptions.Width" class="control-label"></label>
+                <input asp-for="CheckersOptions.Width" class="form-control" />
+                <span asp-validation-for="CheckersOptions.Width" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CheckersOptions.Height" class="control-label"></label>
+                <input asp-for="CheckersOptions.Height" class="form-control" />
+                <span asp-validation-for="CheckersOptions.Height" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="CheckersOptions.WhiteStarts" /> @Html.DisplayNameFor(model => model.CheckersOptions.WhiteStarts)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="CheckersOptions.CaptureMandatory" /> @Html.DisplayNameFor(model => model.CheckersOptions.CaptureMandatory)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="CheckersOptions.CaptureBackwardsAllowed" /> @Html.DisplayNameFor(model => model.CheckersOptions.CaptureBackwardsAllowed)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="CheckersOptions.KingCanFly" /> @Html.DisplayNameFor(model => model.CheckersOptions.KingCanFly)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="CheckersOptions.PieceFilledRowsPerSide" class="control-label"></label>
+                <input asp-for="CheckersOptions.PieceFilledRowsPerSide" class="form-control" />
+                <span asp-validation-for="CheckersOptions.PieceFilledRowsPerSide" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

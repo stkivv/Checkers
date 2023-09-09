@@ -1,0 +1,79 @@
+@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model WebApp.Pages_CheckersOptions.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Options</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckersOptions[0].OptionsName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckersOptions[0].Width)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckersOptions[0].Height)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckersOptions[0].WhiteStarts)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckersOptions[0].CaptureMandatory)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckersOptions[0].CaptureBackwardsAllowed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckersOptions[0].KingCanFly)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckersOptions[0].PieceFilledRowsPerSide)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.CheckersOptions) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OptionsName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Width)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Height)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WhiteStarts)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CaptureMandatory)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CaptureBackwardsAllowed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.KingCanFly)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PieceFilledRowsPerSide)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.CheckersOptionsId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.CheckersOptionsId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.CheckersOptionsId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

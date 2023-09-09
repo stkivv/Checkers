@@ -1,0 +1,240 @@
+﻿@page
+@using ConsoleUI
+@using Domain
+@model WebApp.Pages_CheckersGame.Play
+
+@{
+    ViewData["Title"] = "Play: " + Model.Game!.GameName;
+}
+
+@if (Model.GameIsOver == true)
+{
+    <div class="game-over-text"> GAME HAS ENDED! </div>
+}
+
+<table class="game-info">
+    @if (Model.Brain.WhiteTurn)
+    {
+        <tr>
+            <td class="game-turn-indicator">White turn (@Model.Game!.Player1Name)</td>
+        </tr>
+    }
+    else
+    {
+        <tr>
+            <td class="game-turn-indicator">Black turn (@Model.Game!.Player2Name)</td>
+        </tr>
+    }
+    <tr>
+        <td> &nbsp</td>
+    </tr>
+    <tr>
+        <td class = game-info-text>Ruleset: 
+            <a asp-page="../CheckersOptions/Details" 
+               asp-route-id="@Model.Brain.Options!.CheckersOptionsId"
+               asp-route-gameId="@Model.Game.CheckersGameId"
+               asp-route-playerSide="@Model.PlayerSide"
+            >@Model.Brain.Options.OptionsName</a></td>
+    </tr>
+    @if (Model.MoveInProgress == true && Model.Brain.Options!.CaptureMandatory == false)
+    {
+        <tr>
+            <td class=game-info-text-button
+                onclick="window.location = '/CheckersGame/Play?id=@Model.Game.CheckersGameId&playerSide=@Model.PlayerSide&changeTurnFlag=true'">
+                END TURN ANYWAY
+            </td>
+        </tr>
+    }
+    @if (Model.GameIsOver != true)
+    {
+        <tr>
+            <td> &nbsp</td>
+        </tr>
+        <tr>
+            <td class = game-info-text-button onclick="window.location =
+         '/CheckersGame/Play?id=@Model.Game.CheckersGameId&playerSide=@Model.PlayerSide&undo=true'">UNDO</td>
+        </tr>
+    }
+    @if ((Model.SourceX != null & Model.SourceY != null) && Model.MoveInProgress != true)
+    {
+        <tr>
+            <td> &nbsp</td>
+        </tr>
+        <tr>
+            <td class = game-info-text-button-cancel onclick="window.location =
+         '/CheckersGame/Play?id=@Model.Game.CheckersGameId&playerSide=@Model.PlayerSide'">CANCEL MOVE</td>
+        </tr>
+    }
+    <tr>
+        <td class="game-info-text-button-end" 
+            onclick="window.location =
+        '/CheckersGame/Play?id=@Model.Game.CheckersGameId&playerSide=@Model.PlayerSide&gameOverFlag=true'"> END GAME </td>
+    </tr>
+</table>
+
+<table class="game-board">
+    @{
+        ESquareState[,] board = Model.Brain.GetBoard();
+        var rows = board.GetLength(0);
+        var cols = board.GetLength(1);
+        bool whiteTile = true; //for making black and white squares
+
+        //used for highlighting possible moves
+        List<Tuple<int, int>> moves = new List<Tuple<int, int>>();
+        List<Tuple<int, int>> captureMoves = new List<Tuple<int, int>>();
+        if (Model.SourceX != null && Model.SourceY != null)
+        {
+            moves = Model.Brain.GetAllAvailableMoves(Model.SourceX, Model.SourceY);
+            captureMoves = Model.Brain.GetAllAvailableMoves(Model.SourceX, Model.SourceY, true);
+        }
+        
+        //player cant move opponents pieces
+        bool isPlayersTurn = Model.PlayerSide is EPlayerSide.WhiteSide && Model.Brain.WhiteTurn ||
+                             Model.PlayerSide is EPlayerSide.BlackSide && !Model.Brain.WhiteTurn;
+    }
+
+    @{
+        //adds letters to the top of the board
+        char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+        <td class="game-board-coordinate"> </td>
+        for (var i = 0; i < cols; i++)
+        {
+            <td class="game-board-coordinate">@alphabet[i]</td>
+        }
+        <td class="game-board-coordinate"> </td>
+    }
+
+    @for (var x = 0; x < rows; x++)
+    {
+        <tr>
+            <td class="game-board-coordinate">@(x + 1)</td>
+            @for (var y = 0; y < cols; y++)
+            {
+                if (whiteTile)
+                {
+                    <td class="game-board-square-white"></td>
+                    whiteTile = false;
+                }
+                else //black tile
+                {
+                    if (board[x, y] != ESquareState.Empty) //piece on tile
+                    {
+                        string pieceRepr = "";
+                        if (board[x, y] == ESquareState.BlackPiece)
+                        {
+                            pieceRepr = "🔴";
+                        }
+                        if (board[x, y] == ESquareState.WhitePiece)
+                        {
+                            pieceRepr = "⚪";
+                        }
+                        if (board[x, y] == ESquareState.BlackKing)
+                        {
+                            pieceRepr = "⭕";
+                        }
+                        if (board[x, y] == ESquareState.WhiteKing)
+                        {
+                            pieceRepr = "🔵";
+                        }
+
+                        if (Model.SourceX == x && Model.SourceY == y && Model.MoveInProgress != true)
+                        {
+                            <td class="game-board-square-selected"
+                                onclick="window.location = '/CheckersGame/Play?id=@Model.Game.CheckersGameId&playerSide=@Model.PlayerSide&SourceY=@y&SourceX=@x'">@pieceRepr</td>
+                        }
+                        else
+                        {
+                            if (Model.Brain.WhiteTurn && pieceRepr is "⚪" or "🔵" && Model.GameIsOver != true
+                                && Model.MoveInProgress != true && isPlayersTurn)
+                            {
+                                <td class="game-board-square-black"
+                                    onclick="window.location = '/CheckersGame/Play?id=@Model.Game.CheckersGameId&playerSide=@Model.PlayerSide&SourceY=@y&SourceX=@x'">@pieceRepr</td>
+                            }
+                            else if (!Model.Brain.WhiteTurn && pieceRepr is "🔴" or "⭕" && Model.GameIsOver != true
+                                     && Model.MoveInProgress != true && isPlayersTurn)
+                            {
+                                <td class="game-board-square-black"
+                                    onclick="window.location = '/CheckersGame/Play?id=@Model.Game.CheckersGameId&playerSide=@Model.PlayerSide&SourceY=@y&SourceX=@x'">@pieceRepr</td>
+                            }
+                            else
+                            {
+                                <td class="game-board-square-black">@pieceRepr</td>
+                            }
+
+                        }
+
+                    }
+                    else // empty black tile
+                    {
+                        if (Model.SourceX != null && Model.SourceY != null)
+                        {
+                            var squareClass = "game-board-square-black";
+                            Tuple<int, int> currentSquare = new Tuple<int, int>(x, y);
+                            if (captureMoves.Count > 0 && captureMoves.Contains(currentSquare))
+                            {
+                                squareClass = "game-board-square-highlighted";
+                            }
+                            if (moves.Contains(currentSquare) && (captureMoves.Count == 0 || Model.Game.Options!.CaptureMandatory is false))
+                            {
+                                squareClass = "game-board-square-highlighted";
+                            }
+
+                            if (squareClass == "game-board-square-highlighted")
+                            {
+                                <td class=@squareClass
+                                    onclick="window.location = '/CheckersGame/Play?id=@Model.Game.CheckersGameId&playerSide=@Model.PlayerSide&SourceY=@Model.SourceY&SourceX=@Model.SourceX&TargetY=@y&TargetX=@x'"></td>
+                            }
+                            else
+                            {
+                                <td class="game-board-square-black"></td>
+                            }
+                        }
+                        else
+                        {
+                            <td class="game-board-square-black"></td>
+                        }
+                    }
+                    whiteTile = true;
+                }
+            }
+            <td class="game-board-coordinate">@(x + 1)</td>
+        </tr>
+        if (cols % 2 == 0)
+        {
+            whiteTile = !whiteTile;
+        }
+    }
+
+    @{
+        //adds letters to the bottom of the board
+        <td class="game-board-coordinate"> </td>
+        for (var i = 0; i < cols; i++)
+        {
+            <td class="game-board-coordinate">@alphabet[i]</td>
+        }
+        <td class="game-board-coordinate"> </td>
+    }
+
+</table>
+
+@if (Model.Brain.GetAllAvailableMoves(null, null, true).Count > 0 && Model.MoveInProgress != true)
+{
+    <div class = "game-board-annotation"> Capture available!</div>
+}
+@if (Model.MoveInProgress == true)
+{
+    <div class = "game-board-annotation">More jumps can be made!</div>
+}
+
+@section Scripts
+{
+    @if (Model.PlayerSide == EPlayerSide.WhiteSide && !Model.Brain.WhiteTurn ||
+         Model.PlayerSide == EPlayerSide.BlackSide && Model.Brain.WhiteTurn)
+    {
+        <script>
+        setTimeout( () => {
+            window.location = '/CheckersGame/Play?id=@Model.Game.CheckersGameId&playerSide=@Model.PlayerSide'
+            }, 1000)
+        </script>
+    }
+}

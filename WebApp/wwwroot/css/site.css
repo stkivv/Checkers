@@ -1,0 +1,105 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.game-board {
+  margin-left: auto;
+  margin-bottom: 10%;
+  float: left;
+}
+
+.game-info {
+  float: left;
+  width: 30%
+}
+
+.game-info-text {
+  font-size: 20px;
+}
+
+.game-info-text-button, .game-info-text-button-cancel, .game-info-text-button-end {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  padding: 10px;
+  background-color: #0c63e4;
+  display: inline-block;
+  border-radius: 10px;
+}
+
+.game-info-text-button-cancel, .game-info-text-button-end {
+  background-color: #b02a37;
+}
+
+.game-info-text-button-end {
+  position: absolute;
+  bottom: 10%;
+}
+
+.game-over-text {
+  width: 100%;
+  text-align: center;
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+  background-color: crimson;
+  border-radius: 10px;
+}
+
+.game-board-square-black, .game-board-square-white, .game-board-square-selected, .game-board-square-highlighted {
+  border: 1px solid black;
+  border-collapse: collapse;
+  width: 45px;
+  height: 45px;
+  text-align: center;
+}
+
+.game-board-square-black {
+  background-color: black;
+  font-size: 26px;
+}
+
+.game-board-square-selected {
+  background-color: #3dd5f3;
+  font-size: 26px;
+}
+
+.game-board-square-highlighted {
+  background-color: indianred;
+  font-size: 26px;
+}
+
+.game-board-coordinate {
+  width: 45px;
+  height: 45px;
+  text-align: center;
+  color: #adb5bd;
+}
+
+.game-board-annotation {
+  font-size: 18px;
+  font-weight: bold;
+  color: #0c63e4;
+  float: top;
+}
+
+.game-turn-indicator {
+  text-align: left;
+  font-size: 32px;
+  font-weight: bold;
+}
